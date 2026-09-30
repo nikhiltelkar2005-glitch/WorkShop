@@ -9,20 +9,30 @@ const pathFile = path.join(__dirname, 'db.json');
 
 async function readFile() {
     try {
-        let data = await fs.readFile(pathFile, "utf-8")
+        let data = await fs.readFile(pathFile, "utf-8");
         return JSON.parse(data);
     } catch (error) {
-        console.log("Error reading db:", error)
+        console.log("Error reading db:", error);
+    }
+}
+
+async function readFileWithDelay() {
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+        let data = await fs.readFile(pathFile, "utf-8");
+        return JSON.parse(data);
+    } catch (error) {
+        console.log("Error reading db:", error);
     }
 }
 
 app.get("/products", async (req, res) => {
-    let products = await readFile();
+    let products = await readFileWithDelay();
     res.json(products);
 })
 
 app.get("/products/:id", async (req, res) => {
-    let products = await readFile();
+    let products = await readFileWithDelay();
     let productId = req.params.id;
     
     let product = products.find(p => p.id == productId);
